@@ -1,0 +1,85 @@
+# Model Configuration for Traffic Accident Hotspot Prediction
+
+# LightGBM Configuration
+lightgbm:
+  objective: multiclass
+  num_class: 4
+  metric: multi_logloss
+  boosting_type: gbdt
+  num_leaves: 31
+  learning_rate: 0.05
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  bagging_freq: 5
+  verbose: -1
+  random_state: 42
+  n_estimators: 1000
+  early_stopping_rounds: 50
+
+# Random Forest Configuration
+random_forest:
+  n_estimators: 200
+  max_depth: 15
+  min_samples_split: 5
+  min_samples_leaf: 2
+  random_state: 42
+  n_jobs: -1
+
+# Deep Learning Configuration
+lstm:
+  sequence_length: 7
+  hidden_units: 32
+  dropout_rate: 0.2
+  learning_rate: 0.001
+  batch_size: 64
+  epochs: 100
+
+# Spatial Configuration
+spatial:
+  h3_level: 7
+  hotspot_threshold: 10
+  time_window_days: 30
+  severity_weights:
+    1: 1.0
+    2: 1.5
+    3: 2.0
+    4: 3.0
+
+# Feature Engineering
+features:
+  temporal:
+    - hour_sin
+    - hour_cos
+    - dayofweek_sin
+    - dayofweek_cos
+    - month_sin
+    - month_cos
+    - is_weekend
+    - is_rush_hour
+    - is_night
+
+  weather:
+    - temperature_category
+    - wind_category
+    - visibility_category
+    - heat_index
+    - wind_chill_calc
+
+  spatial:
+    - h3_cell
+    - distance_to_center
+    - lat_rounded
+    - lng_rounded
+
+  road:
+    - road_complexity
+    - has_traffic_control
+
+# Data Paths
+paths:
+  raw_data: "data/us_accidents.csv"
+  processed_data: "data/processed_accidents.csv"
+  features_data: "data/features_accidents.csv"
+  hotspot_data: "data/hotspot_accidents.csv"
+  models_dir: "models/"
+  results_dir: "results/"
